@@ -1,0 +1,3911 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Little Bloom Classroom</title>
+
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs"
+        type="module"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Itim&family=Mali:wght@400;500;600;700&display=swap');
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --pink:#ff8fb3;
+    --pink-dark:#e96d98;
+    --lav:#a99aed;
+    --blue:#8bd3f7;
+    --mint:#9fe1c3;
+    --yellow:#ffd978;
+    --cream:#fffaf3;
+    --ink:#55465f;
+    --line:#eadff0;
+    --white:#ffffff;
+    --shadow:0 14px 35px rgba(103,80,120,.12);
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Mali','Segoe UI',sans-serif;
+    color:var(--ink);
+    background:
+        linear-gradient(
+            135deg,
+            #fff6fa,
+            #f5f1ff 48%,
+            #effaff
+        );
+    min-height:100vh;
+}
+
+button,
+input,
+select{
+    font-family:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    width:245px;
+    background:rgba(255,255,255,.92);
+    border-right:1px solid var(--line);
+    padding:22px 16px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    z-index:20;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+.logo{
+    width:48px;
+    height:48px;
+    border-radius:16px;
+    background:
+        linear-gradient(
+            135deg,
+            #ffabc5,
+            #b9abff
+        );
+    display:grid;
+    place-items:center;
+    font-size:27px;
+    box-shadow:0 7px 0 #eadff1;
+}
+
+.brand h1{
+    font:25px 'Itim',cursive;
+    color:#765d85;
+    line-height:1;
+}
+
+.brand small{
+    font-size:11px;
+    color:#9b8ca2;
+}
+
+.nav{
+    display:grid;
+    gap:8px;
+}
+
+.nav button{
+    border:0;
+    background:transparent;
+    color:#75657d;
+    text-align:left;
+    padding:12px 14px;
+    border-radius:16px;
+    font-size:15px;
+    font-weight:600;
+    transition:.2s;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:
+        linear-gradient(
+            90deg,
+            #ffe6ef,
+            #eee9ff
+        );
+    color:#74557e;
+    transform:translateX(3px);
+}
+
+.nav button span{
+    display:inline-grid;
+    width:28px;
+}
+
+.sidebar-tip{
+    margin-top:25px;
+    background:#fff7d9;
+    border:2px dashed #f0d17b;
+    border-radius:20px;
+    padding:14px;
+    font-size:12px;
+    line-height:1.6;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+    flex:1;
+    min-width:0;
+}
+
+.topbar{
+    height:76px;
+    background:rgba(255,255,255,.82);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 30px;
+
+    position:sticky;
+    top:0;
+    z-index:15;
+}
+
+.top-title{
+    font:26px 'Itim',cursive;
+    color:#745a82;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+
+    display:grid;
+    place-items:center;
+
+    background:#ffe0ea;
+    border:3px solid white;
+
+    box-shadow:
+        0 3px 12px #d8c9df;
+}
+
+/* =========================
+   PAGE
+========================= */
+
+.page{
+    display:none;
+    padding:30px;
+    max-width:1300px;
+    margin:auto;
+}
+
+.page.active{
+    display:block;
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    display:grid;
+    grid-template-columns:1.5fr .8fr;
+    gap:20px;
+
+    background:
+        linear-gradient(
+            120deg,
+            #ffb2c9,
+            #c3b6ff 60%,
+            #a7ddf6
+        );
+
+    border-radius:30px;
+    padding:30px;
+
+    color:white;
+
+    box-shadow:var(--shadow);
+
+    overflow:hidden;
+    position:relative;
+}
+
+.hero:after{
+    content:'☁️  ✨  🌈';
+
+    position:absolute;
+    right:20px;
+    top:14px;
+
+    font-size:36px;
+    opacity:.45;
+}
+
+.hero h2{
+    font:42px 'Itim',cursive;
+    line-height:1.05;
+    margin-bottom:10px;
+}
+
+.hero p{
+    max-width:620px;
+    line-height:1.7;
+}
+
+.hero-actions{
+    margin-top:18px;
+
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    border:0;
+    border-radius:15px;
+    padding:10px 16px;
+    font-weight:700;
+
+    box-shadow:
+        0 5px 0 rgba(90,70,100,.14);
+}
+
+.btn-light{
+    background:white;
+    color:#765d85;
+}
+
+.btn-pink{
+    background:#ff7fa7;
+    color:white;
+}
+
+/* =========================
+   MASCOT
+========================= */
+
+.mascot{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.mascot-bubble{
+    text-align:center;
+}
+
+.mascot-face{
+    width:175px;
+    height:175px;
+
+    border-radius:45%;
+
+    background:#fff3d7;
+
+    border:8px solid rgba(255,255,255,.75);
+
+    display:grid;
+    place-items:center;
+
+    font-size:90px;
+
+    box-shadow:
+        0 15px 0 rgba(115,80,110,.12);
+
+    transform:rotate(2deg);
+}
+
+.mascot-name{
+    background:white;
+    color:#765d85;
+
+    border-radius:999px;
+
+    padding:7px 18px;
+
+    margin-top:-4px;
+
+    position:relative;
+
+    font-weight:700;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.section-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+
+    margin:28px 0 15px;
+}
+
+.section-head h3{
+    font:28px 'Itim',cursive;
+    color:#725b7d;
+}
+
+.section-head p{
+    font-size:13px;
+    color:#95869c;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.cards{
+    display:grid;
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:16px;
+}
+
+.card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:22px;
+
+    padding:18px;
+
+    box-shadow:var(--shadow);
+}
+
+.subject{
+    min-height:145px;
+
+    position:relative;
+    overflow:hidden;
+
+    transition:.2s;
+}
+
+.subject:hover{
+    transform:translateY(-5px);
+}
+
+.subject .icon{
+    font-size:42px;
+}
+
+.subject h4{
+    margin:8px 0 3px;
+}
+
+.subject p{
+    font-size:12px;
+    color:#93849a;
+}
+
+.subject .count{
+    position:absolute;
+
+    right:14px;
+    bottom:14px;
+
+    background:#f8edf5;
+
+    border-radius:999px;
+
+    padding:5px 9px;
+
+    font-size:11px;
+}
+
+/* =========================
+   BOOK CONTROLS
+========================= */
+
+.controls{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+
+    margin-bottom:18px;
+}
+
+.controls input,
+.controls select{
+    padding:11px 14px;
+
+    border:2px solid #eaddea;
+
+    border-radius:15px;
+
+    background:#fff;
+
+    outline:0;
+}
+
+.controls input{
+    flex:1;
+    min-width:220px;
+}
+
+.upload-btn{
+    background:
+        linear-gradient(
+            135deg,
+            #ff8fb3,
+            #b8a9ff
+        );
+
+    color:white;
+
+    border:0;
+
+    border-radius:15px;
+
+    padding:11px 17px;
+
+    font-weight:700;
+}
+
+/* =========================
+   PDF UPLOAD AREA
+========================= */
+
+.upload-drop{
+    border:2px dashed #d9c7e5;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff8fb,
+            #f6f1ff
+        );
+
+    border-radius:20px;
+
+    padding:20px;
+
+    text-align:center;
+
+    margin-bottom:18px;
+
+    transition:.2s;
+}
+
+.upload-drop.dragover{
+    background:#fff0f7;
+    border-color:var(--pink);
+    transform:scale(1.01);
+}
+
+.upload-drop h4{
+    margin:5px 0;
+}
+
+.upload-drop p{
+    font-size:12px;
+    color:#93849a;
+}
+
+.library-status{
+    display:inline-block;
+
+    font-size:12px;
+
+    color:#8c7b94;
+
+    background:#fff;
+
+    border:1px solid #eadff0;
+
+    border-radius:999px;
+
+    padding:7px 12px;
+
+    margin-top:10px;
+}
+
+/* =========================
+   BOOK SHELF
+========================= */
+
+.shelf{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fill,minmax(190px,1fr));
+
+    gap:18px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #fff5de,
+            #f5e3c3
+        );
+
+    padding:25px;
+
+    border-radius:28px;
+
+    border:4px solid #e5c796;
+
+    box-shadow:
+        inset 0 -12px 0 rgba(150,100,60,.09),
+        var(--shadow);
+}
+
+.book-card{
+    background:#fff;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    border:4px solid #fff;
+
+    box-shadow:
+        0 8px 0 rgba(170,130,150,.16),
+        0 10px 22px rgba(100,80,120,.10);
+
+    transition:.2s;
+
+    cursor:pointer;
+}
+
+.book-card:hover{
+    transform:
+        translateY(-8px)
+        scale(1.02);
+}
+
+.book-cover{
+    height:220px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#fff;
+
+    text-align:center;
+
+    padding:15px;
+
+    font:25px 'Itim',cursive;
+
+    position:relative;
+}
+
+.book-cover:before{
+    content:'✨';
+
+    position:absolute;
+
+    top:9px;
+    left:12px;
+}
+
+.book-cover:after{
+    content:'🌈';
+
+    position:absolute;
+
+    bottom:8px;
+    right:10px;
+
+    font-size:30px;
+}
+
+.book-info{
+    padding:12px;
+    text-align:center;
+}
+
+.book-title{
+    font-weight:700;
+
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* =========================
+   SAVED PDF
+========================= */
+
+.saved-pdfs{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fill,minmax(230px,1fr));
+
+    gap:14px;
+
+    margin-top:15px;
+}
+
+.saved-pdf{
+    background:#fff;
+
+    border:1px solid var(--line);
+
+    border-radius:20px;
+
+    padding:14px;
+
+    box-shadow:
+        0 10px 25px rgba(103,80,120,.09);
+}
+
+.pdf-icon{
+    font-size:34px;
+}
+
+.saved-pdf h4{
+    margin:5px 0;
+    word-break:break-word;
+}
+
+.saved-pdf small{
+    color:#95869c;
+
+    display:block;
+
+    line-height:1.5;
+}
+
+.saved-pdf-actions{
+    display:flex;
+
+    gap:7px;
+
+    margin-top:10px;
+
+    flex-wrap:wrap;
+}
+
+.mini-progress{
+    height:8px;
+
+    background:#f0e9f2;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    margin-top:8px;
+}
+
+.mini-progress i{
+    display:block;
+
+    height:100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff8fb3,
+            #a99aed
+        );
+
+    border-radius:999px;
+}
+
+.empty-note{
+    background:#fff;
+
+    border:2px dashed #eaddeb;
+
+    border-radius:18px;
+
+    padding:20px;
+
+    text-align:center;
+
+    color:#9a8da0;
+}
+
+/* =========================
+   CLASSROOM
+========================= */
+
+.class-grid{
+    display:grid;
+
+    grid-template-columns:
+        1.5fr 1fr;
+
+    gap:18px;
+}
+
+.lesson-card{
+    background:#fff;
+
+    border:1px solid var(--line);
+
+    border-radius:22px;
+
+    padding:20px;
+
+    box-shadow:var(--shadow);
+}
+
+.lesson-card h4{
+    font-size:19px;
+
+    margin-bottom:8px;
+}
+
+.lesson-card p{
+    font-size:13px;
+
+    line-height:1.7;
+
+    color:#87778e;
+}
+
+.lesson-actions{
+    display:flex;
+
+    gap:8px;
+
+    margin-top:13px;
+
+    flex-wrap:wrap;
+}
+
+.pill{
+    border:0;
+
+    border-radius:12px;
+
+    padding:8px 11px;
+
+    background:#f4edff;
+
+    color:#745d86;
+
+    font-weight:600;
+}
+
+/* =========================
+   EXERCISES
+========================= */
+
+.exercise-list{
+    display:grid;
+    gap:12px;
+}
+
+.exercise{
+    display:flex;
+
+    align-items:center;
+
+    gap:13px;
+
+    background:white;
+
+    border:1px solid var(--line);
+
+    border-radius:18px;
+
+    padding:14px;
+
+    box-shadow:
+        0 7px 20px rgba(100,80,120,.07);
+}
+
+.ex-icon{
+    width:44px;
+    height:44px;
+
+    border-radius:14px;
+
+    display:grid;
+    place-items:center;
+
+    background:#fff0d6;
+
+    font-size:23px;
+}
+
+.exercise .meta{
+    flex:1;
+}
+
+.exercise .meta strong{
+    display:block;
+}
+
+.exercise .meta small{
+    color:#998ba0;
+}
+
+/* =========================
+   SCORE
+========================= */
+
+.score-hero{
+    display:grid;
+
+    grid-template-columns:
+        .7fr 1.3fr;
+
+    gap:18px;
+}
+
+.score-big{
+    background:
+        linear-gradient(
+            135deg,
+            #ffe4ee,
+            #eee8ff
+        );
+
+    border-radius:25px;
+
+    padding:25px;
+
+    text-align:center;
+}
+
+.score-big .num{
+    font:65px 'Itim',cursive;
+
+    color:#8b70a0;
+}
+
+.score-big small{
+    color:#8e7d96;
+}
+
+.progress{
+    height:12px;
+
+    background:#f0e9f2;
+
+    border-radius:999px;
+
+    overflow:hidden;
+}
+
+.progress i{
+    display:block;
+
+    height:100%;
+
+    border-radius:999px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ff8fb3,
+            #a99aed
+        );
+}
+
+.badges{
+    display:flex;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+    margin-top:14px;
+}
+
+.badge{
+    background:#fff;
+
+    border:1px solid var(--line);
+
+    border-radius:17px;
+
+    padding:11px 14px;
+
+    text-align:center;
+}
+
+.badge b{
+    display:block;
+    font-size:25px;
+}
+
+/* =========================
+   REAL PDF VIEWER
+========================= */
+
+.pdf-reader{
+    position:fixed;
+
+    inset:0;
+
+    background:#f7f3fb;
+
+    z-index:2000;
+
+    display:none;
+
+    flex-direction:column;
+}
+
+.pdf-reader.open{
+    display:flex;
+}
+
+.pdf-reader-bar{
+    background:
+        linear-gradient(
+            90deg,
+            #ff9fbe,
+            #bba9ff
+        );
+
+    color:#fff;
+
+    padding:9px 12px;
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    box-shadow:
+        0 5px 20px rgba(100,80,140,.2);
+}
+
+.pdf-reader-bar button,
+.pdf-reader-bar input{
+    border:0;
+
+    border-radius:11px;
+
+    padding:7px 10px;
+
+    font-family:inherit;
+}
+
+.pdf-reader-bar button{
+    background:rgba(255,255,255,.2);
+
+    color:#fff;
+
+    font-weight:700;
+}
+
+.pdf-reader-bar button:hover{
+    background:rgba(255,255,255,.35);
+}
+
+.pdf-title{
+    font-weight:700;
+
+    max-width:280px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+    white-space:nowrap;
+}
+
+.pdf-spacer{
+    flex:1;
+}
+
+.pdf-page-info{
+    background:rgba(255,255,255,.2);
+
+    border-radius:11px;
+
+    padding:7px 10px;
+
+    font-size:12px;
+}
+
+.pdf-scroll{
+    flex:1;
+
+    overflow:auto;
+
+    padding:25px;
+
+    text-align:center;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #fff,
+            #f1ecf8
+        );
+}
+
+.reader-note{
+    font-size:12px;
+
+    color:#8d7f94;
+
+    margin:0 auto 15px;
+}
+
+.pdf-canvas-wrap{
+    position:relative;
+
+    display:inline-block;
+
+    background:#fff;
+
+    box-shadow:
+        0 15px 35px rgba(80,60,100,.2);
+
+    margin-bottom:22px;
+}
+
+.pdf-canvas{
+    display:block;
+
+    max-width:90vw;
+
+    height:auto;
+}
+
+/* =========================
+   ORIGINAL DRAWING VIEWER
+========================= */
+
+#viewer-section{
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff5fa,
+            #f2efff
+        );
+
+    z-index:1000;
+
+    flex-direction:column;
+}
+
+.toolbar{
+    background:
+        linear-gradient(
+            90deg,
+            #ff9fbe,
+            #bba9ff
+        );
+
+    color:white;
+
+    padding:10px 14px;
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+}
+
+.toolbar button,
+.toolbar input{
+    padding:8px 12px;
+
+    border:0;
+
+    border-radius:12px;
+}
+
+.toolbar button{
+    background:rgba(255,255,255,.22);
+
+    color:#fff;
+
+    font-weight:700;
+}
+
+.toolbar button.active{
+    background:#fff;
+    color:#765d85;
+}
+
+.close-btn{
+    background:#ff6f91!important;
+}
+
+.viewer-body{
+    position:relative;
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    overflow:auto;
+
+    padding:20px;
+}
+
+.document-page{
+    position:relative;
+
+    width:700px;
+    height:900px;
+
+    background:white;
+
+    box-shadow:
+        0 15px 35px rgba(100,80,120,.25);
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    color:#c1b6c8;
+}
+
+#paintCanvas{
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    cursor:crosshair;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    .sidebar{
+        width:78px;
+        padding:16px 10px;
+    }
+
+    .brand h1,
+    .brand small,
+    .nav button b,
+    .sidebar-tip{
+        display:none;
+    }
+
+    .brand{
+        justify-content:center;
+    }
+
+    .nav button{
+        text-align:center;
+    }
+
+    .nav button span{
+        width:auto;
+    }
+
+    .cards{
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+    .hero,
+    .class-grid,
+    .score-hero{
+        grid-template-columns:1fr;
+    }
+
+    .mascot{
+        display:none;
+    }
+}
+
+@media(max-width:600px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .page{
+        padding:18px;
+    }
+
+    .topbar{
+        padding:0 18px;
+    }
+
+    .profile span{
+        display:none;
+    }
+
+    .cards{
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .hero h2{
+        font-size:32px;
+    }
+
+    .pdf-title{
+        max-width:130px;
+    }
+
+    .pdf-scroll{
+        padding:10px;
+    }
+
+    .pdf-canvas{
+        max-width:96vw;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- ================= SIDEBAR ================= -->
+
+<aside class="sidebar">
+
+<div class="brand">
+
+<div class="logo">
+📚
+</div>
+
+<div>
+<h1>Little Bloom</h1>
+<small>Digital Classroom</small>
+</div>
+
+</div>
+
+<nav class="nav">
+
+<button class="active"
+onclick="showPage('home',this)">
+<span>🏠</span>
+<b>Home</b>
+</button>
+
+<button onclick="showPage('subjects',this)">
+<span>🌈</span>
+<b>หมวดวิชา</b>
+</button>
+
+<button onclick="showPage('books',this)">
+<span>📚</span>
+<b>ชั้นหนังสือ</b>
+</button>
+
+<button onclick="showPage('classroom',this)">
+<span>🧑‍🏫</span>
+<b>ห้องเรียน</b>
+</button>
+
+<button onclick="showPage('exercises',this)">
+<span>✏️</span>
+<b>แบบฝึกหัด</b>
+</button>
+
+<button onclick="showPage('scores',this)">
+<span>🏆</span>
+<b>คะแนนนักเรียน</b>
+</button>
+
+</nav>
+
+<div class="sidebar-tip">
+
+💡 <b>มุมคุณครู</b>
+
+<br>
+
+อ่านหนังสือ เปิดบทเรียน
+และฝึกทำกิจกรรมได้
+ในเว็บไซต์เดียว
+
+</div>
+
+</aside>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="main">
+
+<header class="topbar">
+
+<div class="top-title"
+id="top-title">
+
+🏠 หน้าแรก
+
+</div>
+
+<div class="profile">
+
+<span>
+สวัสดีค่ะ คุณครู 🌷
+</span>
+
+<div class="avatar">
+👩🏻‍🏫
+</div>
+
+</div>
+
+</header>
+
+
+<!-- ================= HOME ================= -->
+
+<section class="page active"
+id="home">
+
+<div class="hero">
+
+<div>
+
+<h2>
+ยินดีต้อนรับ
+<br>
+สู่ห้องเรียนแสนสนุก! 🎀
+</h2>
+
+<p>
+พื้นที่เรียนรู้ดิจิทัล
+รวมชั้นหนังสือ บทเรียน
+แบบฝึกหัด และคะแนนไว้ในที่เดียว
+</p>
+
+<div class="hero-actions">
+
+<button class="btn btn-light"
+onclick="showPage('books')">
+📚 เปิดชั้นหนังสือ
+</button>
+
+<button class="btn btn-pink"
+onclick="showPage('exercises')">
+✏️ ทำแบบฝึกหัด
+</button>
+
+</div>
+
+</div>
+
+
+<div class="mascot">
+
+<div class="mascot-bubble">
+
+<div class="mascot-face">
+🐰
+</div>
+
+<div class="mascot-name">
+น้องบลูม 🌷
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="section-head">
+
+<div>
+
+<h3>
+🌟 เมนูด่วน
+</h3>
+
+<p>
+เลือกสิ่งที่อยากเรียนรู้วันนี้
+</p>
+
+</div>
+
+</div>
+
+
+<div class="cards">
+
+<div class="card subject"
+onclick="showPage('subjects')">
+
+<div class="icon">
+🌈
+</div>
+
+<h4>
+หมวดวิชา
+</h4>
+
+<p>
+เลือกวิชาที่สนใจ
+</p>
+
+<span class="count">
+4 วิชา
+</span>
+
+</div>
+
+
+<div class="card subject"
+onclick="showPage('books')">
+
+<div class="icon">
+📚
+</div>
+
+<h4>
+ชั้นหนังสือ
+</h4>
+
+<p>
+ค้นหาและอ่านหนังสือ
+</p>
+
+<span class="count">
+PDF
+</span>
+
+</div>
+
+
+<div class="card subject"
+onclick="showPage('classroom')">
+
+<div class="icon">
+🧑‍🏫
+</div>
+
+<h4>
+ห้องเรียน
+</h4>
+
+<p>
+บทเรียนและกิจกรรม
+</p>
+
+<span class="count">
+วันนี้
+</span>
+
+</div>
+
+
+<div class="card subject"
+onclick="showPage('scores')">
+
+<div class="icon">
+🏆
+</div>
+
+<h4>
+คะแนนนักเรียน
+</h4>
+
+<p>
+ติดตามความก้าวหน้า
+</p>
+
+<span class="count">
+80%
+</span>
+
+</div>
+
+</div>
+
+
+<div class="section-head">
+
+<div>
+
+<h3>
+🐰 น้องบลูมชวนเรียน
+</h3>
+
+<p>
+“อ่านวันละนิด สนุกและเก่งขึ้นทุกวัน!”
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= SUBJECTS ================= -->
+
+<section class="page"
+id="subjects">
+
+<div class="section-head">
+
+<div>
+
+<h3>
+🌈 หมวดวิชา
+</h3>
+
+<p>
+เลือกวิชาเพื่อดูหนังสือและกิจกรรม
+</p>
+
+</div>
+
+</div>
+
+
+<div class="cards">
+
+<div class="card subject">
+
+<div class="icon">
+🔢
+</div>
+
+<h4>
+คณิตศาสตร์
+</h4>
+
+<p>
+ฝึกคิด วิเคราะห์ และแก้โจทย์
+</p>
+
+<span class="count">
+8 หนังสือ
+</span>
+
+</div>
+
+
+<div class="card subject">
+
+<div class="icon">
+🔬
+</div>
+
+<h4>
+วิทยาศาสตร์
+</h4>
+
+<p>
+เรียนรู้โลกผ่านการทดลอง
+</p>
+
+<span class="count">
+6 หนังสือ
+</span>
+
+</div>
+
+
+<div class="card subject">
+
+<div class="icon">
+🔤
+</div>
+
+<h4>
+ภาษาอังกฤษ
+</h4>
+
+<p>
+คำศัพท์ บทสนทนา และการอ่าน
+</p>
+
+<span class="count">
+5 หนังสือ
+</span>
+
+</div>
+
+
+<div class="card subject">
+
+<div class="icon">
+📖
+</div>
+
+<h4>
+ภาษาไทย
+</h4>
+
+<p>
+อ่านจับใจความและสร้างสรรค์ภาษา
+</p>
+
+<span class="count">
+7 หนังสือ
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= BOOKS ================= -->
+
+<section class="page"
+id="books">
+
+<div class="section-head">
+
+<div>
+
+<h3>
+📚 ชั้นหนังสือการ์ตูน
+</h3>
+
+<p>
+หนังสือ PDF ของคุณจะถูกเก็บไว้ในเว็บไซต์
+และจำหน้าที่อ่านล่าสุด
+</p>
+
+</div>
+
+</div>
+
+
+<!-- PDF UPLOAD -->
+
+<div class="upload-drop"
+id="pdfDropZone">
+
+<div style="font-size:40px">
+📥📖
+</div>
+
+<h4>
+เพิ่มหนังสือ PDF เข้าชั้นหนังสือ
+</h4>
+
+<p>
+เลือกไฟล์ PDF หรือ
+ลากไฟล์มาวางที่นี่
+</p>
+
+<p>
+ข้อมูลจะถูกเก็บไว้ใน Browser
+ของอุปกรณ์เครื่องนี้
+</p>
+
+
+<input
+type="file"
+id="pdf-upload"
+accept="application/pdf"
+multiple
+style="display:none"
+>
+
+
+<button
+class="upload-btn"
+onclick="document.getElementById('pdf-upload').click()">
+
+📤 เลือกไฟล์ PDF
+
+</button>
+
+
+<div
+id="pdf-library-status"
+class="library-status">
+
+กำลังตรวจสอบชั้นหนังสือ…
+
+</div>
+
+</div>
+
+
+<!-- SEARCH -->
+
+<div class="controls">
+
+<input
+id="bookSearch"
+type="text"
+placeholder="🔍 ค้นหาชื่อหนังสือ..."
+oninput="filterBooks()"
+>
+
+
+<select
+id="bookCategory"
+onchange="filterBooks()">
+
+<option value="">
+ทุกหมวดหมู่
+</option>
+
+<option>
+คณิตศาสตร์
+</option>
+
+<option>
+วิทยาศาสตร์
+</option>
+
+<option>
+ภาษาอังกฤษ
+</option>
+
+<option>
+ภาษาไทย
+</option>
+
+</select>
+
+</div>
+
+
+<!-- SAMPLE BOOKS -->
+
+<div
+class="shelf"
+id="bookShelf">
+
+
+<div
+class="book-card"
+data-category="คณิตศาสตร์"
+data-title="คณิตศาสตร์ ม.1"
+onclick="openViewer('คณิตศาสตร์ ม.1')">
+
+<div
+class="book-cover"
+style="background:linear-gradient(145deg,#62b9ef,#8aa7ff)">
+
+🔢
+<br>
+คณิตศาสตร์
+<br>
+แสนสนุก
+
+</div>
+
+<div class="book-info">
+
+<div class="book-title">
+คณิตศาสตร์ ม.1
+</div>
+
+</div>
+
+</div>
+
+
+<div
+class="book-card"
+data-category="วิทยาศาสตร์"
+data-title="วิทยาศาสตร์ ม.2"
+onclick="openViewer('วิทยาศาสตร์ ม.2')">
+
+<div
+class="book-cover"
+style="background:linear-gradient(145deg,#58c99a,#8bd8d2)">
+
+🔬
+<br>
+วิทยาศาสตร์
+<br>
+นักสำรวจ
+
+</div>
+
+<div class="book-info">
+
+<div class="book-title">
+วิทยาศาสตร์ ม.2
+</div>
+
+</div>
+
+</div>
+
+
+<div
+class="book-card"
+data-category="ภาษาอังกฤษ"
+data-title="English Fun"
+onclick="openViewer('English Fun')">
+
+<div
+class="book-cover"
+style="background:linear-gradient(145deg,#ff9ab9,#c2a8ff)">
+
+🔤
+<br>
+English
+<br>
+Fun!
+
+</div>
+
+<div class="book-info">
+
+<div class="book-title">
+English Fun
+</div>
+
+</div>
+
+</div>
+
+
+<div
+class="book-card"
+data-category="ภาษาไทย"
+data-title="อ่านจับใจความ"
+onclick="openViewer('อ่านจับใจความ')">
+
+<div
+class="book-cover"
+style="background:linear-gradient(145deg,#ffc95f,#ff9f9f)">
+
+📖
+<br>
+อ่านจับใจความ
+<br>
+อย่างสนุก
+
+</div>
+
+<div class="book-info">
+
+<div class="book-title">
+อ่านจับใจความ
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- SAVED PDF -->
+
+<div class="section-head">
+
+<div>
+
+<h3>
+💾 หนังสือ PDF ของฉัน
+</h3>
+
+<p>
+เปิดอ่านต่อจากหน้าล่าสุดได้ทุกครั้ง
+ใน Browser เครื่องเดิม
+</p>
+
+</div>
+
+</div>
+
+
+<div
+id="savedPdfList"
+class="saved-pdfs">
+
+</div>
+
+</section>
+
+
+<!-- ================= CLASSROOM ================= -->
+
+<section class="page"
+id="classroom">
+
+<div class="section-head">
+
+<div>
+
+<h3>
+🧑‍🏫 ห้องเรียนดิจิทัล
+</h3>
+
+<p>
+พื้นที่สำหรับบทเรียนและกิจกรรม
+</p>
+
+</div>
+
+</div>
+
+
+<div class="class-grid">
+
+
+<div class="lesson-card">
+
+<h4>
+🌟 บทเรียนวันนี้:
+อ่านจับใจความสำคัญ
+</h4>
+
+<p>
+
+เรียนรู้การค้นหาคำสำคัญ
+และสรุปใจความด้วยแผนผังความคิด
+
+</p>
+
+
+<div class="lesson-actions">
+
+<button
+class="pill"
+onclick="openViewer('บทเรียนอ่านจับใจความ')">
+
+📖 เปิดบทเรียน
+
+</button>
+
+
+<button
+class="pill"
+onclick="showPage('exercises')">
+
+✏️ ทำกิจกรรม
+
+</button>
+
+</div>
+
+</div>
+
+
+<div class="lesson-card">
+
+<h4>
+🐰 ผู้ช่วยประจำห้อง
+</h4>
+
+<p>
+
+น้องบลูมพร้อมช่วยเตือน
+ให้อ่านหนังสือและทำกิจกรรม
+
+</p>
+
+<div class="badges">
+
+<div class="badge">
+<b>📚</b>
+อ่าน 2 เล่ม
+</div>
+
+<div class="badge">
+<b>⭐</b>
+ได้ 8 ดาว
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= EXERCISES ================= -->
+
+<section class="page"
+id="exercises">
+
+<div class="section-head">
+
+<div>
+
+<h3>
+✏️ แบบฝึกหัด
+</h3>
+
+<p>
+กิจกรรมฝึกทักษะสำหรับนักเรียน
+</p>
+
+</div>
+
+</div>
+
+
+<div class="exercise-list">
+
+
+<div class="exercise">
+
+<div class="ex-icon">
+🧠
+</div>
+
+<div class="meta">
+
+<strong>
+จับคู่คำสำคัญกับใจความ
+</strong>
+
+<small>
+ภาษาไทย · 10 ข้อ · 10 คะแนน
+</small>
+
+</div>
+
+<button
+class="pill"
+onclick="alert('เริ่มแบบฝึกหัด')">
+
+เริ่มทำ
+
+</button>
+
+</div>
+
+
+<div class="exercise">
+
+<div class="ex-icon">
+🔢
+</div>
+
+<div class="meta">
+
+<strong>
+โจทย์คณิตคิดสนุก
+</strong>
+
+<small>
+คณิตศาสตร์ · 15 ข้อ · 15 คะแนน
+</small>
+
+</div>
+
+<button
+class="pill"
+onclick="alert('เริ่มแบบฝึกหัด')">
+
+เริ่มทำ
+
+</button>
+
+</div>
+
+
+<div class="exercise">
+
+<div class="ex-icon">
+🔬
+</div>
+
+<div class="meta">
+
+<strong>
+นักวิทยาศาสตร์ตัวน้อย
+</strong>
+
+<small>
+วิทยาศาสตร์ · 10 ข้อ · 10 คะแนน
+</small>
+
+</div>
+
+<button
+class="pill"
+onclick="alert('เริ่มแบบฝึกหัด')">
+
+เริ่มทำ
+
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= SCORES ================= -->
+
+<section class="page"
+id="scores">
+
+<div class="section-head">
+
+<div>
+
+<h3>
+🏆 คะแนนนักเรียน
+</h3>
+
+<p>
+ภาพรวมความก้าวหน้าและรางวัล
+</p>
+
+</div>
+
+</div>
+
+
+<div class="score-hero">
+
+
+<div class="score-big">
+
+<div class="num">
+80%
+</div>
+
+<small>
+ความก้าวหน้าโดยรวม
+</small>
+
+<div
+class="progress"
+style="margin-top:18px">
+
+<i style="width:80%"></i>
+
+</div>
+
+</div>
+
+
+<div class="lesson-card">
+
+<h4>
+🌟 ความสำเร็จล่าสุด
+</h4>
+
+<p>
+
+ทำกิจกรรมสำเร็จ 8 จาก 10 รายการ
+และอ่านหนังสือครบตามเป้าหมาย
+
+</p>
+
+
+<div class="badges">
+
+<div class="badge">
+<b>🏅</b>
+นักอ่านตัวจิ๋ว
+</div>
+
+<div class="badge">
+<b>🌟</b>
+ขยันเรียน
+</div>
+
+<div class="badge">
+<b>🐰</b>
+เพื่อนน้องบลูม
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- ================= ORIGINAL DRAWING VIEWER ================= -->
+
+<div
+id="viewer-section">
+
+<div class="toolbar">
+
+<span
+id="current-book-title"
+style="font-weight:700">
+
+ชื่อหนังสือ
+
+</span>
+
+
+<button
+id="btn-pen"
+class="active"
+onclick="setMode('pen')">
+
+✏️ ปากกา
+
+</button>
+
+
+<button
+id="btn-eraser"
+onclick="setMode('eraser')">
+
+🧹 ยางลบ
+
+</button>
+
+
+<label>
+สี:
+</label>
+
+<input
+type="color"
+id="color-picker"
+value="#ff0000"
+>
+
+
+<label>
+ขนาด:
+</label>
+
+<input
+type="range"
+id="brush-size"
+min="1"
+max="20"
+value="3"
+>
+
+
+<button
+onclick="clearCanvas()">
+
+🗑️ ล้างหน้าจอ
+
+</button>
+
+
+<button
+class="close-btn"
+onclick="closeViewer()">
+
+❌ ปิด
+
+</button>
+
+</div>
+
+
+<div class="viewer-body">
+
+<div
+class="document-page"
+id="document-page">
+
+<span>
+[ พื้นที่แสดงเนื้อหาหนังสือ ]
+</span>
+
+<canvas
+id="paintCanvas"
+width="700"
+height="900">
+</canvas>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= REAL PDF READER ================= -->
+
+<div
+id="pdf-reader"
+class="pdf-reader">
+
+<div class="pdf-reader-bar">
+
+
+<span
+id="pdf-reader-title"
+class="pdf-title">
+
+📖 หนังสือ PDF
+
+</span>
+
+
+<button onclick="pdfPrev()">
+◀ ก่อนหน้า
+</button>
+
+
+<span
+id="pdf-page-info"
+class="pdf-page-info">
+
+หน้า 1 / 1
+
+</span>
+
+
+<button onclick="pdfNext()">
+ถัดไป ▶
+</button>
+
+
+<button onclick="pdfZoom(-.1)">
+➖
+</button>
+
+
+<button onclick="pdfZoom(.1)">
+➕
+</button>
+
+
+<button onclick="pdfFit()">
+↔️ พอดีหน้าจอ
+</button>
+
+
+<button onclick="pdfSaveProgress()">
+💾 บันทึกความคืบหน้า
+</button>
+
+
+<span class="pdf-spacer"></span>
+
+
+<button
+class="close-btn"
+onclick="closePdfReader()">
+
+❌ ปิด
+
+</button>
+
+</div>
+
+
+<div
+class="pdf-scroll"
+id="pdf-scroll">
+
+<div
+class="reader-note"
+id="pdf-reader-note">
+
+กำลังโหลด PDF…
+
+</div>
+
+
+<div
+id="pdf-pages">
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+function showPage(id,btn){
+
+document
+.querySelectorAll('.page')
+.forEach(function(p){
+
+p.classList.remove('active');
+
+});
+
+
+var page=document.getElementById(id);
+
+if(page){
+page.classList.add('active');
+}
+
+
+document
+.querySelectorAll('.nav button')
+.forEach(function(b){
+
+b.classList.remove('active');
+
+});
+
+
+if(btn){
+btn.classList.add('active');
+}
+
+
+var titles={
+
+home:'🏠 หน้าแรก',
+
+subjects:'🌈 หมวดวิชา',
+
+books:'📚 ชั้นหนังสือ',
+
+classroom:'🧑‍🏫 ห้องเรียน',
+
+exercises:'✏️ แบบฝึกหัด',
+
+scores:'🏆 คะแนนนักเรียน'
+
+};
+
+
+document.getElementById('top-title').textContent =
+titles[id] || 'ห้องเรียนออนไลน์';
+
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+
+if(id==='books'){
+renderPdfLibrary();
+}
+
+}
+
+
+/* =====================================================
+   SEARCH BOOK
+===================================================== */
+
+function filterBooks(){
+
+var q =
+(document.getElementById('bookSearch').value || '')
+.toLowerCase();
+
+var c =
+document.getElementById('bookCategory').value;
+
+
+document
+.querySelectorAll('#bookShelf .book-card')
+.forEach(function(card){
+
+var okText =
+card.dataset.title
+.toLowerCase()
+.includes(q);
+
+var okCat =
+!c ||
+card.dataset.category === c;
+
+
+card.style.display =
+(okText && okCat)
+? 'flex'
+: 'none';
+
+});
+
+}
+
+
+/* =====================================================
+   ORIGINAL DRAWING TOOL
+===================================================== */
+
+var canvas;
+var ctx;
+var drawing=false;
+var mode='pen';
+
+
+function initCanvas(){
+
+canvas =
+document.getElementById('paintCanvas');
+
+if(!canvas)return;
+
+ctx =
+canvas.getContext('2d');
+
+
+canvas.addEventListener(
+'pointerdown',
+startDraw
+);
+
+canvas.addEventListener(
+'pointermove',
+draw
+);
+
+canvas.addEventListener(
+'pointerup',
+stopDraw
+);
+
+canvas.addEventListener(
+'pointerleave',
+stopDraw
+);
+
+}
+
+
+function pos(e){
+
+var r =
+canvas.getBoundingClientRect();
+
+return{
+
+x:(e.clientX-r.left) *
+(canvas.width/r.width),
+
+y:(e.clientY-r.top) *
+(canvas.height/r.height)
+
+};
+
+}
+
+
+function startDraw(e){
+
+drawing=true;
+
+var p=pos(e);
+
+ctx.beginPath();
+
+ctx.moveTo(
+p.x,
+p.y
+);
+
+}
+
+
+function draw(e){
+
+if(!drawing)return;
+
+var p=pos(e);
+
+ctx.lineCap='round';
+
+ctx.lineJoin='round';
+
+ctx.lineWidth =
++document
+.getElementById('brush-size')
+.value;
+
+
+ctx.strokeStyle =
+mode==='eraser'
+? '#ffffff'
+: document
+.getElementById('color-picker')
+.value;
+
+
+ctx.lineTo(
+p.x,
+p.y
+);
+
+ctx.stroke();
+
+}
+
+
+function stopDraw(){
+
+drawing=false;
+
+}
+
+
+function setMode(m){
+
+mode=m;
+
+document
+.getElementById('btn-pen')
+.classList
+.toggle(
+'active',
+m==='pen'
+);
+
+
+document
+.getElementById('btn-eraser')
+.classList
+.toggle(
+'active',
+m==='eraser'
+);
+
+}
+
+
+function clearCanvas(){
+
+if(ctx){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+}
+
+}
+
+
+function openViewer(title){
+
+document
+.getElementById('viewer-section')
+.style.display='flex';
+
+
+document
+.getElementById('current-book-title')
+.textContent=title;
+
+
+if(!canvas){
+
+initCanvas();
+
+}
+
+}
+
+
+function closeViewer(){
+
+document
+.getElementById('viewer-section')
+.style.display='none';
+
+}
+
+
+/* =====================================================
+   INDEXED DB
+===================================================== */
+
+const DB_NAME =
+'LittleBloomPDFLibrary';
+
+const DB_VERSION = 1;
+
+const STORE =
+'pdfs';
+
+let db=null;
+
+
+function openDB(){
+
+return new Promise(
+function(resolve,reject){
+
+if(db){
+
+resolve(db);
+
+return;
+
+}
+
+
+var request =
+indexedDB.open(
+DB_NAME,
+DB_VERSION
+);
+
+
+request.onupgradeneeded =
+function(e){
+
+var d =
+e.target.result;
+
+
+if(!d.objectStoreNames
+.contains(STORE)){
+
+var store =
+d.createObjectStore(
+STORE,
+{
+keyPath:'id',
+autoIncrement:true
+}
+);
+
+store.createIndex(
+'name',
+'name',
+{unique:false}
+);
+
+}
+
+};
+
+
+request.onsuccess =
+function(e){
+
+db=e.target.result;
+
+resolve(db);
+
+};
+
+
+request.onerror =
+function(){
+
+reject(request.error);
+
+};
+
+});
+
+}
+
+
+function dbGetAll(){
+
+return openDB()
+.then(function(d){
+
+return new Promise(
+function(resolve,reject){
+
+var tx =
+d.transaction(
+STORE,
+'readonly'
+);
+
+var store =
+tx.objectStore(STORE);
+
+var request =
+store.getAll();
+
+
+request.onsuccess =
+function(){
+
+resolve(
+request.result || []
+);
+
+};
+
+
+request.onerror =
+function(){
+
+reject(
+request.error
+);
+
+};
+
+});
+
+});
+
+}
+
+
+function dbGet(id){
+
+return openDB()
+.then(function(d){
+
+return new Promise(
+function(resolve,reject){
+
+var request =
+d
+.transaction(STORE,'readonly')
+.objectStore(STORE)
+.get(id);
+
+
+request.onsuccess =
+function(){
+
+resolve(
+request.result
+);
+
+};
+
+
+request.onerror =
+function(){
+
+reject(
+request.error
+);
+
+};
+
+});
+
+});
+
+}
+
+
+function dbPut(obj){
+
+return openDB()
+.then(function(d){
+
+return new Promise(
+function(resolve,reject){
+
+var request =
+d
+.transaction(
+STORE,
+'readwrite'
+)
+.objectStore(STORE)
+.put(obj);
+
+
+request.onsuccess =
+function(){
+
+resolve(
+request.result
+);
+
+};
+
+
+request.onerror =
+function(){
+
+reject(
+request.error
+);
+
+};
+
+});
+
+});
+
+}
+
+
+function dbDelete(id){
+
+return openDB()
+.then(function(d){
+
+return new Promise(
+function(resolve,reject){
+
+var request =
+d
+.transaction(
+STORE,
+'readwrite'
+)
+.objectStore(STORE)
+.delete(id);
+
+
+request.onsuccess =
+function(){
+
+resolve();
+
+};
+
+
+request.onerror =
+function(){
+
+reject(
+request.error
+);
+
+};
+
+});
+
+});
+
+}
+
+
+/* =====================================================
+   FORMAT FILE SIZE
+===================================================== */
+
+function fmtBytes(n){
+
+if(n<1024)
+return n+' B';
+
+if(n<1048576)
+return (n/1024).toFixed(1)+' KB';
+
+return (n/1048576).toFixed(1)+' MB';
+
+}
+
+
+function escapeHtml(s){
+
+return String(s)
+.replace(
+/[&<>"']/g,
+function(c){
+
+return {
+
+'&':'&amp;',
+'<':'&lt;',
+'>':'&gt;',
+'"':'&quot;',
+"'":'&#39;'
+
+}[c];
+
+});
+
+}
+
+
+/* =====================================================
+   SAVE PDF
+===================================================== */
+
+async function savePdfFile(file){
+
+var status =
+document
+.getElementById(
+'pdf-library-status'
+);
+
+
+try{
+
+if(
+file.type!=='application/pdf' &&
+!file.name
+.toLowerCase()
+.endsWith('.pdf')
+){
+
+alert(
+'กรุณาเลือกไฟล์ PDF เท่านั้น'
+);
+
+return;
+
+}
+
+
+status.textContent =
+'กำลังบันทึก “'+
+file.name+
+'”…';
+
+
+await dbPut({
+
+name:file.name,
+
+size:file.size,
+
+type:'application/pdf',
+
+blob:file,
+
+lastPage:1,
+
+totalPages:0,
+
+updatedAt:Date.now()
+
+});
+
+
+status.textContent =
+'บันทึกแล้ว ✓';
+
+
+await renderPdfLibrary();
+
+
+/* เปิด PDF หลังอัปโหลด */
+
+var files =
+await dbGetAll();
+
+
+var latest =
+files
+.filter(
+x=>x.name===file.name
+)
+.sort(
+(a,b)=>
+b.updatedAt-a.updatedAt
+)[0];
+
+
+if(latest){
+
+await openStoredPdf(
+latest.id
+);
+
+}
+
+
+}catch(error){
+
+console.error(error);
+
+status.textContent =
+'บันทึกไม่สำเร็จ';
+
+
+alert(
+'ไม่สามารถบันทึกไฟล์ PDF ได้'
+);
+
+}
+
+}
+
+
+/* =====================================================
+   PDF LIBRARY
+===================================================== */
+
+async function renderPdfLibrary(){
+
+var list =
+document.getElementById(
+'savedPdfList'
+);
+
+
+if(!list)return;
+
+
+var files =
+await dbGetAll();
+
+
+document
+.getElementById(
+'pdf-library-status'
+)
+.textContent =
+files.length
+? 'มีหนังสือ PDF '+files.length+' ไฟล์'
+: 'ยังไม่มีหนังสือ PDF';
+
+
+if(!files.length){
+
+list.innerHTML = `
+
+<div
+class="empty-note"
+style="grid-column:1/-1">
+
+📚 ยังไม่มี PDF ในชั้นหนังสือ
+
+<br>
+
+กด “เลือกไฟล์ PDF”
+เพื่อเพิ่มหนังสือเล่มแรก
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+files.sort(
+function(a,b){
+
+return
+(b.updatedAt||0) -
+(a.updatedAt||0);
+
+});
+
+
+list.innerHTML =
+files.map(
+function(f){
+
+var pct =
+f.totalPages
+? Math.round(
+(f.lastPage||1) /
+f.totalPages *
+100
+)
+:0;
+
+
+return `
+
+<div class="saved-pdf">
+
+<div class="pdf-icon">
+📕
+</div>
+
+<h4>
+${escapeHtml(f.name)}
+</h4>
+
+<small>
+
+${fmtBytes(f.size)}
+
+· อ่านถึงหน้า
+${f.lastPage||1}
+
+${f.totalPages
+? ' / '+f.totalPages
+: ''}
+
+</small>
+
+
+<div class="mini-progress">
+
+<i
+style="width:${pct}%">
+</i>
+
+</div>
+
+
+<div class="saved-pdf-actions">
+
+<button
+class="pill"
+onclick="openStoredPdf(${f.id})">
+
+📖 เปิดอ่าน
+
+</button>
+
+
+<button
+class="pill"
+onclick="deleteStoredPdf(${f.id})">
+
+🗑️ ลบ
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+)
+.join('');
+
+}
+
+
+/* =====================================================
+   PDF.JS
+===================================================== */
+
+var pdfDoc=null;
+
+var currentPdfId=null;
+
+var currentPdfFileName='';
+
+var currentPdfPage=1;
+
+var pdfScale=1;
+
+
+async function openStoredPdf(id){
+
+var file =
+await dbGet(id);
+
+
+if(!file)return;
+
+
+currentPdfId=id;
+
+currentPdfFileName=
+file.name;
+
+currentPdfPage=
+file.lastPage || 1;
+
+pdfScale=1;
+
+
+var arrayBuffer =
+await file.blob.arrayBuffer();
+
+
+await loadPdfBytes(
+arrayBuffer
+);
+
+}
+
+
+async function loadPdfBytes(bytes){
+
+try{
+
+if(!window.pdfjsLib){
+
+window.pdfjsLib =
+await import(
+'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs'
+);
+
+}
+
+
+window.pdfjsLib
+.GlobalWorkerOptions
+.workerSrc =
+'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs';
+
+
+pdfDoc =
+await window.pdfjsLib
+.getDocument({
+data:bytes
+})
+.promise;
+
+
+document
+.getElementById(
+'pdf-reader-title'
+)
+.textContent =
+'📖 '+currentPdfFileName;
+
+
+document
+.getElementById(
+'pdf-reader'
+)
+.classList
+.add('open');
+
+
+currentPdfPage =
+Math.min(
+Math.max(
+currentPdfPage,
+1
+),
+pdfDoc.numPages
+);
+
+
+await renderPdfPage(
+currentPdfPage
+);
+
+
+await saveCurrentProgress(
+false
+);
+
+
+}catch(error){
+
+console.error(error);
+
+alert(
+'เปิด PDF ไม่สำเร็จ\n'+
+(error.message || '')
+);
+
+}
+
+}
+
+
+/* =====================================================
+   RENDER PDF PAGE
+===================================================== */
+
+async function renderPdfPage(num){
+
+if(!pdfDoc)return;
+
+
+currentPdfPage =
+Math.min(
+Math.max(
+num,
+1
+),
+pdfDoc.numPages
+);
+
+
+document
+.getElementById(
+'pdf-page-info'
+)
+.textContent =
+'หน้า '+
+currentPdfPage+
+' / '+
+pdfDoc.numPages;
+
+
+var page =
+await pdfDoc
+.getPage(
+currentPdfPage
+);
+
+
+var viewport =
+page.getViewport({
+scale:pdfScale
+});
+
+
+var wrap =
+document
+.getElementById(
+'pdf-pages'
+);
+
+
+wrap.innerHTML='';
+
+
+var holder =
+document.createElement(
+'div'
+);
+
+
+holder.className =
+'pdf-canvas-wrap';
+
+
+var canvas =
+document.createElement(
+'canvas'
+);
+
+
+canvas.className =
+'pdf-canvas';
+
+
+canvas.width =
+viewport.width;
+
+canvas.height =
+viewport.height;
+
+
+holder.appendChild(
+canvas
+);
+
+wrap.appendChild(
+holder
+);
+
+
+await page.render({
+
+canvasContext:
+canvas.getContext('2d'),
+
+viewport:viewport
+
+}).promise;
+
+
+document
+.getElementById(
+'pdf-scroll'
+)
+.scrollTop=0;
+
+}
+
+
+/* =====================================================
+   PAGE NAVIGATION
+===================================================== */
+
+async function pdfPrev(){
+
+if(
+pdfDoc &&
+currentPdfPage>1
+){
+
+await saveCurrentProgress(
+false
+);
+
+currentPdfPage--;
+
+await renderPdfPage(
+currentPdfPage
+);
+
+await saveCurrentProgress(
+false
+);
+
+}
+
+}
+
+
+async function pdfNext(){
+
+if(
+pdfDoc &&
+currentPdfPage<
+pdfDoc.numPages
+){
+
+await saveCurrentProgress(
+false
+);
+
+currentPdfPage++;
+
+await renderPdfPage(
+currentPdfPage
+);
+
+await saveCurrentProgress(
+false
+);
+
+}
+
+}
+
+
+/* =====================================================
+   ZOOM
+===================================================== */
+
+function pdfZoom(delta){
+
+pdfScale =
+Math.max(
+.5,
+Math.min(
+2.5,
+pdfScale+delta
+)
+);
+
+
+renderPdfPage(
+currentPdfPage
+);
+
+}
+
+
+function pdfFit(){
+
+pdfScale=1;
+
+renderPdfPage(
+currentPdfPage
+);
+
+}
+
+
+/* =====================================================
+   SAVE READING PROGRESS
+===================================================== */
+
+async function saveCurrentProgress(
+show=true
+){
+
+if(
+!currentPdfId ||
+!pdfDoc
+){
+
+return;
+
+}
+
+
+var file =
+await dbGet(
+currentPdfId
+);
+
+
+if(!file)return;
+
+
+file.lastPage =
+currentPdfPage;
+
+file.totalPages =
+pdfDoc.numPages;
+
+file.updatedAt =
+Date.now();
+
+
+await dbPut(file);
+
+
+if(show){
+
+var note =
+document
+.getElementById(
+'pdf-reader-note'
+);
+
+
+note.textContent =
+'บันทึกความคืบหน้าแล้ว ✓ หน้า '+
+currentPdfPage+
+' / '+
+pdfDoc.numPages;
+
+
+setTimeout(
+function(){
+
+note.textContent =
+'ความคืบหน้าจะบันทึกอัตโนมัติ';
+
+},
+1800
+);
+
+}
+
+}
+
+
+function pdfSaveProgress(){
+
+saveCurrentProgress(
+true
+);
+
+}
+
+
+/* =====================================================
+   CLOSE PDF
+===================================================== */
+
+async function closePdfReader(){
+
+await saveCurrentProgress(
+false
+);
+
+
+document
+.getElementById(
+'pdf-reader'
+)
+.classList
+.remove('open');
+
+
+pdfDoc=null;
+
+
+await renderPdfLibrary();
+
+}
+
+
+/* =====================================================
+   DELETE PDF
+===================================================== */
+
+async function deleteStoredPdf(id){
+
+var file =
+await dbGet(id);
+
+
+if(!file)return;
+
+
+if(
+confirm(
+'ต้องการลบ “'+
+file.name+
+'” ออกจากชั้นหนังสือหรือไม่?'
+)
+){
+
+await dbDelete(id);
+
+await renderPdfLibrary();
+
+}
+
+}
+
+
+/* =====================================================
+   FILE INPUT
+===================================================== */
+
+document.addEventListener(
+'DOMContentLoaded',
+function(){
+
+initCanvas();
+
+renderPdfLibrary();
+
+
+var input =
+document.getElementById(
+'pdf-upload'
+);
+
+
+var zone =
+document.getElementById(
+'pdfDropZone'
+);
+
+
+input.addEventListener(
+'change',
+function(){
+
+Array
+.from(input.files || [])
+.forEach(
+savePdfFile
+);
+
+input.value='';
+
+});
+
+
+/* Drag & Drop */
+
+[
+'dragenter',
+'dragover'
+]
+.forEach(
+function(eventName){
+
+zone.addEventListener(
+eventName,
+function(e){
+
+e.preventDefault();
+
+zone.classList
+.add('dragover');
+
+});
+
+});
+
+
+[
+'dragleave',
+'drop'
+]
+.forEach(
+function(eventName){
+
+zone.addEventListener(
+eventName,
+function(e){
+
+e.preventDefault();
+
+zone.classList
+.remove('dragover');
+
+});
+
+});
+
+
+zone.addEventListener(
+'drop',
+function(e){
+
+Array
+.from(
+e.dataTransfer.files || []
+)
+.filter(
+function(file){
+
+return (
+file.type==='application/pdf' ||
+file.name
+.toLowerCase()
+.endsWith('.pdf')
+);
+
+})
+.forEach(
+savePdfFile
+);
+
+});
+
+});
+
+
+/* =====================================================
+   AUTO SAVE BEFORE LEAVE
+===================================================== */
+
+window.addEventListener(
+'beforeunload',
+function(){
+
+if(pdfDoc){
+
+saveCurrentProgress(false);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
